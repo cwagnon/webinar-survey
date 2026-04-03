@@ -1,0 +1,6 @@
+question_label,Keep objectives separate,Combine into a single objective,Ecological Function,Cultural Flows,Yes,No,Yes - duplicative,No - meaningfully different,Retain Minimize River Drying,Retain minimize TMDL
+Decision 1: Should ecological function and cultural flows be combined?,7 (58.3%),5 (41.7%),NA,NA,NA,NA,NA,NA,NA,NA
+"Decision 2: If kept separate, which objective should include river drying?",NA,NA,12 (100.0%),0 (0.0%),NA,NA,NA,NA,NA,NA
+Decision 3: Is TMDL a reasonable proxy for cultural flows?,NA,NA,NA,NA,7 (58.3%),5 (41.7%),NA,NA,NA,NA
+Decision 4: Are TMDL and river drying duplicative?,NA,NA,NA,NA,NA,NA,3 (25.0%),9 (75.0%),NA,NA
+"Decision 5: If one should be retained, which should remain?",NA,NA,NA,NA,NA,NA,NA,NA,8 (88.9%),1 (11.1%)

@@ -1,0 +1,6 @@
+variable,question_label,responses_non_missing,total_participants,response_rate
+combined_objective,Decision 1: Should ecological function and cultural flows be combined?,12,12,1
+assign_drying,"Decision 2: If kept separate, which objective should include river drying?",12,12,1
+tmdl_proxy,Decision 3: Is TMDL a reasonable proxy for cultural flows?,12,12,1
+tmdl_duplicative,Decision 4: Are TMDL and river drying duplicative?,12,12,1
+tmdl_drying,"Decision 5: If one should be retained, which should remain?",9,12,0.75

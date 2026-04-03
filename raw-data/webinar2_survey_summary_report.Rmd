@@ -1,0 +1,176 @@
+---
+title: "Webinar 2 Survey Summary"
+author: "Casey"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: cosmo
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 5,
+  fig.align = "center"
+)
+```
+
+```{r packages, include=FALSE}
+required_packages <- c(
+  "tidyverse",
+  "gt",
+  "scales",
+  "glue",
+  "knitr"
+)
+
+installed <- rownames(installed.packages())
+for (pkg in required_packages) {
+  if (!pkg %in% installed) install.packages(pkg)
+}
+
+library(tidyverse)
+library(gt)
+library(scales)
+library(glue)
+library(knitr)
+```
+
+```{r source-analysis, include=FALSE}
+source("summarize_webinar2_survey_report_ready.R", local = TRUE)
+```
+
+# Overview
+
+This report summarizes responses from the Webinar 2 survey for the RGSM Options Tool. It includes participant information, response rates, closed-ended question summaries, plots for two-option questions, and tables of open-ended responses.
+
+```{r overview-metrics}
+overview_tbl <- tibble(
+  Metric = c(
+    "Total survey responses",
+    "Unique participants",
+    "Closed-ended questions summarized",
+    "Open-ended questions summarized",
+    "Two-option charts produced"
+  ),
+  Value = c(
+    n_participants,
+    nrow(participants_unique),
+    length(closed_ended_cols),
+    length(open_ended_cols_present),
+    length(plot_list)
+  )
+)
+
+gt(overview_tbl) |>
+  tab_header(title = md("**Survey overview**"))
+```
+
+# Participant List
+
+```{r participants-table}
+gt(participants_unique) |>
+  tab_header(title = md("**Participants**")) |>
+  cols_label(
+    first_name = "First name",
+    last_name = "Last name",
+    full_name = "Full name"
+  )
+```
+
+# Response Rate by Question
+
+```{r response-rate-table}
+response_rate |>
+  mutate(response_rate = percent(response_rate, accuracy = 0.1)) |>
+  select(question_label, responses_non_missing, total_participants, response_rate) |>
+  gt() |>
+  tab_header(title = md("**Response rate by question**")) |>
+  cols_label(
+    question_label = "Question",
+    responses_non_missing = "Responses",
+    total_participants = "Total participants",
+    response_rate = "Response rate"
+  )
+```
+
+# Closed-Ended Question Summary
+
+```{r closed-ended-wide}
+summary_wide |>
+  gt() |>
+  tab_header(title = md("**Closed-ended question summary**"))
+```
+
+# Two-Option Question Plots
+
+The plots below show counts and percentages for all two-option questions. For `assign_drying`, the report keeps both possible response options in the chart even though all observed responses selected ecological function.
+
+```{r plot-loop, results='asis'}
+for (nm in names(plot_list)) {
+  cat("## ", get_label(nm), "\n\n", sep = "")
+  print(plot_list[[nm]])
+  cat("\n\n")
+}
+```
+
+# Open-Ended Responses
+
+```{r open-ended-intro, results='asis'}
+if (nrow(open_ended_long) == 0) {
+  cat("No open-ended responses were found in the uploaded file.")
+}
+```
+
+```{r open-ended-sections, results='asis'}
+for (q in open_ended_cols_present) {
+  tab <- open_ended_long |>
+    filter(question == q) |>
+    select(full_name, response)
+
+  cat("## ", get_label(q), "\n\n", sep = "")
+
+  if (nrow(tab) == 0) {
+    cat("No responses provided for this question.\n\n")
+  } else {
+    print(
+      gt(tab) |>
+        tab_header(title = md(paste0("**", get_label(q), "**"))) |>
+        cols_label(
+          full_name = "Participant",
+          response = "Response"
+        )
+    )
+  }
+
+  cat("\n\n")
+}
+```
+
+# Codebook
+
+```{r codebook-table}
+codebook |>
+  select(variable, question_label, non_missing_n, unique_non_missing_values) |>
+  gt() |>
+  tab_header(title = md("**Codebook**")) |>
+  cols_label(
+    variable = "Variable",
+    question_label = "Label",
+    non_missing_n = "Non-missing n",
+    unique_non_missing_values = "Observed values"
+  )
+```
+
+# Notes
+
+- Percentages are based on non-missing responses for each question.
+- Plots and CSV outputs are also written to the `survey_summary_outputs` folder when the sourced script runs.
+- You can knit this report to HTML and share it as a standalone summary.

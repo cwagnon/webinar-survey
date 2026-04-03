@@ -1,0 +1,3 @@
+variable,question_label,response,n,percent,total_responses
+tmdl_drying,"Decision 5: If one should be retained, which should remain?",Retain Minimize River Drying,8,88.9%,9
+tmdl_drying,"Decision 5: If one should be retained, which should remain?",Retain minimize TMDL,1,11.1%,9
